@@ -12,17 +12,17 @@ export default class CarouselPlugin extends Plugin {
   async onload(): Promise<void> {
 
     this.registerMarkdownCodeBlockProcessor("carousel", (source, el, ctx) => {
-      const { OPTIONS, SLIDES, AUTOPLAY, AUTOSCROLL, FADE } = this.parseSource(source, el);
+      const { OPTIONS, SLIDES, HEIGHT, AUTOPLAY, AUTOSCROLL, FADE } = this.parseSource(source, el);
 
       const carousel = React.createElement(EmblaCarousel, {
-        slides: SLIDES,
         options: OPTIONS,
+        slides: SLIDES,
+        height: HEIGHT,
         autoplay: AUTOPLAY,
         autoscroll: AUTOSCROLL,
         fade: FADE,
       });
 
-      // 渲染到 DOM
       createRoot(el).render(carousel);
     });
   }
@@ -30,6 +30,7 @@ export default class CarouselPlugin extends Plugin {
   parseSource(source: string, el: HTMLElement): {
     OPTIONS: EmblaOptionsType,
     SLIDES: string[],
+    HEIGHT: string,
     AUTOPLAY: boolean,
     AUTOSCROLL: boolean,
     FADE: boolean
@@ -40,6 +41,7 @@ export default class CarouselPlugin extends Plugin {
     let autoplay = false;
     let autoscroll = false;
     let fade = false;
+    let height = '25rem';
     configs.forEach((config) => {
       const [key, value] = config.split(":");
       switch (key.toLowerCase()) {
@@ -59,6 +61,9 @@ export default class CarouselPlugin extends Plugin {
           SLIDES.push(...value.split(",").map((url) => {
             return this.app.vault.adapter.getResourcePath(url.trim());
           }));
+          break;
+        case "height":
+          height = value.trim();
           break;
         case "loop":
           option.loop = value.trim() === "true";
@@ -92,6 +97,13 @@ export default class CarouselPlugin extends Plugin {
           break;
       }
     });
-    return { OPTIONS: option, SLIDES, AUTOPLAY: autoplay, AUTOSCROLL: autoscroll, FADE: fade };
+    return {
+      OPTIONS: option,
+      SLIDES: SLIDES,
+      HEIGHT: height,
+      AUTOPLAY: autoplay,
+      AUTOSCROLL: autoscroll,
+      FADE: fade
+    };
   }
 }

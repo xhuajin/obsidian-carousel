@@ -5,7 +5,6 @@ import {
 } from "./EmblaCarouselArrowButtons";
 import React, { useCallback, useEffect, useState } from "react";
 
-import AutoHeight from "embla-carousel-auto-height";
 import AutoScroll from "embla-carousel-auto-scroll";
 import Autoplay from "embla-carousel-autoplay";
 import { EmblaOptionsType } from "embla-carousel";
@@ -13,17 +12,20 @@ import Fade from "embla-carousel-fade";
 import { Thumb } from "./EmblaCarouselThumbsButton";
 import useEmblaCarousel from "embla-carousel-react";
 
+// import AutoHeight from "embla-carousel-auto-height";
+
 type PropType = {
-	slides: string[];
 	options?: EmblaOptionsType;
+	slides: string[];
+	height: string;
 	autoplay?: boolean;
 	autoscroll?: boolean;
 	fade?: boolean;
 };
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
-	const { slides, options, autoplay, autoscroll, fade } = props;
-	const plugins = [AutoHeight()];
+	const { options, slides, height, autoplay, autoscroll, fade } = props;
+	const plugins = [];
 
 	if (fade) {
 		plugins.push(Fade());
@@ -73,7 +75,10 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
 	return (
 		<>
-			<section className="embla">
+			<section
+				className={`embla embla-axis-${options.axis}`}
+				style={{ "--slide-height": height } as React.CSSProperties}
+			>
 				<div className="embla__controls">
 					<div className="embla__buttons">
 						<PrevButton
