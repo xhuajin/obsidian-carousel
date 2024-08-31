@@ -1,0 +1,5 @@
+# Obsidian Carousel
+
+## Feature
+
+## Configuration

@@ -1,0 +1,30 @@
+@import url("./less/basic.less");
+@import url("./less/embed.less");
+
+.workspace-leaf-content[data-type="react-view"] {
+	> .view-header {
+		display: none;
+	}
+	> .view-content {
+		padding: 0;
+	}
+}
+
+:root {
+	--headers_color: #282a2f;
+	--headers_color_rgb: 40, 42, 47;
+	--main_color: #2d3036;
+	--main_color_rgb: 45, 48, 54;
+	--main_background: #fff;
+	--main_background_rgb: 255, 255, 255;
+	--main_gray: #f7f7f7;
+	--inversed_color: var(--main_background);
+	--inversed_color_rgb: var(--main_background_rgb);
+	--inversed_background: var(--headers_color);
+	--inversed_background_rgb: var(--headers_color_rgb);
+	--column_background_active: var(--main_background);
+	--column_background_inactive: #fff;
+	--column_separator_color: rgba(0, 0, 0, 0.06);
+	--dimmed_border_color: #efefef;
+	--current_period_color: #e3631b;
+}
