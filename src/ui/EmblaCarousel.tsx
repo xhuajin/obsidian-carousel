@@ -7,24 +7,26 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import AutoScroll from "embla-carousel-auto-scroll";
 import Autoplay from "embla-carousel-autoplay";
-import { EmblaOptionsType } from "embla-carousel";
+import { CarouselOptions } from "src/types";
 import Fade from "embla-carousel-fade";
 import { Thumb } from "./EmblaCarouselThumbsButton";
 import useEmblaCarousel from "embla-carousel-react";
 
 // import AutoHeight from "embla-carousel-auto-height";
 
-type PropType = {
-	options?: EmblaOptionsType;
-	slides: string[];
-	height: string;
-	autoplay?: boolean;
-	autoscroll?: boolean;
-	fade?: boolean;
-};
+type PropType = CarouselOptions;
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
-	const { options, slides, height, autoplay, autoscroll, fade } = props;
+	const {
+		options,
+		slides,
+		height,
+		slidessize,
+		autoplay,
+		autoscroll,
+		fade,
+		thumb,
+	} = props;
 	const plugins = [];
 
 	if (fade) {
@@ -76,8 +78,15 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 	return (
 		<>
 			<section
-				className={`embla embla-axis-${options.axis}`}
-				style={{ "--slide-height": height } as React.CSSProperties}
+				className={`embla embla-axis-${
+					options?.axis ? options.axis : "x"
+				}`}
+				style={
+					{
+						"--slide-height": height,
+						"--slide-size": slidessize,
+					} as React.CSSProperties
+				}
 			>
 				<div className="embla__controls">
 					<div className="embla__buttons">
@@ -90,8 +99,8 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
 				<div className="embla__viewport" ref={emblaRef}>
 					<div className="embla__container">
-						{slides.map((url) => (
-							<div className="embla__slide" key={url}>
+						{slides.map((url, index) => (
+							<div className="embla__slide" key={index}>
 								<img
 									className="embla__slide__img"
 									src={url}
@@ -111,20 +120,25 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 					</div>
 				</div>
 			</section>
-			<div className="embla-thumbs">
-				<div className="embla-thumbs__viewport" ref={emblaThumbsRef}>
-					<div className="embla-thumbs__container">
-						{slides.map((url, index) => (
-							<Thumb
-								key={index}
-								onClick={() => onThumbClick(index)}
-								selected={index === selectedIndex}
-								url={url}
-							/>
-						))}
+			{thumb && (
+				<div className="embla-thumbs">
+					<div
+						className="embla-thumbs__viewport"
+						ref={emblaThumbsRef}
+					>
+						<div className="embla-thumbs__container">
+							{slides.map((url, index) => (
+								<Thumb
+									key={index}
+									onClick={() => onThumbClick(index)}
+									selected={index === selectedIndex}
+									url={url}
+								/>
+							))}
+						</div>
 					</div>
 				</div>
-			</div>
+			)}
 		</>
 	);
 };

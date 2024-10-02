@@ -1,109 +1,51 @@
-import { AxisDirectionOptionType, AxisOptionType } from "embla-carousel/components/Axis";
-import { Plugin, TFile } from "obsidian";
+import { CAROUSEL_VIEW_TYPE, CarouselConfigurationsView } from "./configuration-view";
+import { Plugin, WorkspaceLeaf } from "obsidian";
 
-import { AlignmentOptionType } from "embla-carousel/components/Alignment";
+import CarouselModal from "./carousel-modal";
 import EmblaCarousel from "./ui/EmblaCarousel";
-import { EmblaOptionsType } from "embla-carousel";
 import React from "react";
 import { createRoot } from 'react-dom/client';
+import { parseSource } from "./utils";
 
 export default class CarouselPlugin extends Plugin {
-
-  async onload(): Promise<void> {
-
+  async onload() {
     this.registerMarkdownCodeBlockProcessor("carousel", (source, el, ctx) => {
-      const { OPTIONS, SLIDES, HEIGHT, AUTOPLAY, AUTOSCROLL, FADE } = this.parseSource(source, el);
-
-      const carousel = React.createElement(EmblaCarousel, {
-        options: OPTIONS,
-        slides: SLIDES,
-        height: HEIGHT,
-        autoplay: AUTOPLAY,
-        autoscroll: AUTOSCROLL,
-        fade: FADE,
-      });
-
+      const carouseloptions = parseSource(this.app, source);
+      const carousel = React.createElement(EmblaCarousel, carouseloptions);
       createRoot(el).render(carousel);
     });
-  }
 
-  parseSource(source: string, el: HTMLElement): {
-    OPTIONS: EmblaOptionsType,
-    SLIDES: string[],
-    HEIGHT: string,
-    AUTOPLAY: boolean,
-    AUTOSCROLL: boolean,
-    FADE: boolean
-  } {
-    const option: EmblaOptionsType = {};
-    const configs = source.split("\n");
-    const SLIDES: string[] = [];
-    let autoplay = false;
-    let autoscroll = false;
-    let fade = false;
-    let height = '25rem';
-    configs.forEach((config) => {
-      const [key, value] = config.split(":");
-      switch (key.toLowerCase()) {
-        case "folder":
-          {
-            const folder = this.app.vault.getFolderByPath(value.trim());
-            if (folder !== null) {
-              SLIDES.push(...folder.children.filter(child => {
-                return child instanceof TFile && (child.extension === 'png' || child.extension === 'jpg');
-              }).map(image => {
-                return this.app.vault.adapter.getResourcePath(image.path);
-              }));
-            }
-          }
-          break;
-        case "images":
-          SLIDES.push(...value.split(",").map((url) => {
-            return this.app.vault.adapter.getResourcePath(url.trim());
-          }));
-          break;
-        case "height":
-          height = value.trim();
-          break;
-        case "loop":
-          option.loop = value.trim() === "true";
-          break;
-        case "direction":
-          option.direction = value.trim() as AxisDirectionOptionType;
-          break;
-        case "slidessize":
-          el.style.setProperty("--slide-size", value.trim());
-          break;
-        case "slidesToScroll":
-          option.slidesToScroll = value.trim() === "auto" ? 'auto' : parseInt(value.trim());
-          break;
-        case "dragfree":
-          option.dragFree = value.trim() === "true";
-          break;
-        case "align":
-          option.align = value.trim() as AlignmentOptionType;
-          break;
-        case "axis":
-          option.axis = value.trim() as AxisOptionType;
-          break;
-        case "autoplay":
-          autoplay = value.trim() === "true";
-          break;
-        case "autoscroll":
-          autoscroll = value.trim() === "true";
-          break;
-        case "fade":
-          fade = value.trim() === "true";
-          break;
-      }
-    });
-    return {
-      OPTIONS: option,
-      SLIDES: SLIDES,
-      HEIGHT: height,
-      AUTOPLAY: autoplay,
-      AUTOSCROLL: autoscroll,
-      FADE: fade
-    };
+    this.registerView(
+      CAROUSEL_VIEW_TYPE,
+      (leaf) => new CarouselConfigurationsView(leaf, this)
+    );
+
+    this.addCommand({
+      id: 'carousel-configs-modal',
+      name: 'Show Carousel Configs in Modal',
+      callback: () => {
+        new CarouselModal(this.app).open();
+      },
+    })
+
+    this.addCommand({
+      id: 'carousel-configs-view',
+      name: 'Show Carousel Configs in View',
+      callback: async () => {
+        const { workspace } = this.app;
+
+        let leaf: WorkspaceLeaf | null = null;
+        const leaves = workspace.getLeavesOfType(CAROUSEL_VIEW_TYPE);
+
+        if (leaves.length > 0) {
+          leaf = leaves[0];
+        } else {
+          leaf = workspace.getRightLeaf(false);
+          await leaf.setViewState({ type: CAROUSEL_VIEW_TYPE, active: true });
+        }
+
+        workspace.revealLeaf(leaf);
+      },
+    })
   }
 }

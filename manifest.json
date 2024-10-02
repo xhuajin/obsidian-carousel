@@ -1,10 +1,10 @@
 {
-	"id": "carousel",
-	"name": "Carousel",
-	"version": "1.0.0",
-	"minAppVersion": "1.0.0",
-	"description": "Create a carousel component in your markdown note.",
-	"author": "Huajin",
-	"authorUrl": "https://github.com/xhuajin",
-	"isDesktopOnly": false
+  "id": "carousel",
+  "name": "Carousel",
+  "version": "1.0.1",
+  "minAppVersion": "1.0.0",
+  "description": "Create a carousel component in your markdown note.",
+  "author": "Huajin",
+  "authorUrl": "https://github.com/xhuajin",
+  "isDesktopOnly": false
 }
