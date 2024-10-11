@@ -1,6 +1,6 @@
 {
   "name": "carousel",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Create a carousel component in your markdown note.",
   "main": "main.js",
   "scripts": {

@@ -26,6 +26,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 		autoscroll,
 		fade,
 		thumb,
+		arrawbutton,
 	} = props;
 	const plugins = [];
 
@@ -88,14 +89,16 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 					} as React.CSSProperties
 				}
 			>
-				<div className="embla__controls">
-					<div className="embla__buttons">
-						<PrevButton
-							onClick={onPrevButtonClick}
-							disabled={prevBtnDisabled}
-						/>
+				{arrawbutton && (
+					<div className="embla__controls">
+						<div className="embla__buttons">
+							<PrevButton
+								onClick={onPrevButtonClick}
+								disabled={prevBtnDisabled}
+							/>
+						</div>
 					</div>
-				</div>
+				)}
 
 				<div className="embla__viewport" ref={emblaRef}>
 					<div className="embla__container">
@@ -111,14 +114,16 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 					</div>
 				</div>
 
-				<div className="embla__controls">
-					<div className="embla__buttons">
-						<NextButton
-							onClick={onNextButtonClick}
-							disabled={nextBtnDisabled}
-						/>
+				{arrawbutton && (
+					<div className="embla__controls">
+						<div className="embla__buttons">
+							<NextButton
+								onClick={onNextButtonClick}
+								disabled={nextBtnDisabled}
+							/>
+						</div>
 					</div>
-				</div>
+				)}
 			</section>
 			{thumb && (
 				<div className="embla-thumbs">

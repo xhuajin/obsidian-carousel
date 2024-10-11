@@ -12,6 +12,7 @@ export interface CarouselOptions {
   autoscroll?: boolean;
   fade?: boolean;
   thumb?: boolean;
+  arrawbutton?: boolean;
 }
 
 export const DEFAULT_CAROUSEL_OPTIONS: CarouselOptions = {
@@ -26,4 +27,5 @@ export const DEFAULT_CAROUSEL_OPTIONS: CarouselOptions = {
   autoscroll: false,
   fade: false,
   thumb: true,
+  arrawbutton: true,
 };

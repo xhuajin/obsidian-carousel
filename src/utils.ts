@@ -1,12 +1,14 @@
-import { App, Setting, TFile, TextComponent } from "obsidian";
 import { AxisDirectionOptionType, AxisOptionType } from "embla-carousel/components/Axis";
+import { Setting, TFile, TextComponent } from "obsidian";
 
 import { AlignmentOptionType } from "embla-carousel/components/Alignment";
 import { CarouselOptions } from "./types";
+import CarouselPlugin from "./main";
 
-export function parseSource(app: App, source: string): CarouselOptions {
+export function parseSource(plugin: CarouselPlugin, source: string): CarouselOptions {
+  const app = plugin.app;
   const configs: string[] = source.split("\n");
-  const carouseloptions: CarouselOptions = { options: {}, slides: [] };
+  const carouseloptions: CarouselOptions = { options: {}, slides: [], arrawbutton: true };
   configs.forEach((config) => {
     if (!config) {
       return;
@@ -84,6 +86,10 @@ export function parseSource(app: App, source: string): CarouselOptions {
           break;
         case "thumb":
           carouseloptions.thumb = value.trim() === "true";
+          break;
+        case "arrawbutton":
+          carouseloptions.arrawbutton = value.trim() === "true";
+          break;
       }
     }
   });

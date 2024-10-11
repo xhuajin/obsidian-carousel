@@ -1,19 +1,20 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 
-import Sample from "./main";
+import CarouselPlugin from "./main";
 
-export interface SampleSettings {
-  asetting: string;
+export interface CarouselPluginSettings {
+  showArrowButtons: boolean;
 }
 
-export const DEFAULT_SETTINGS: SampleSettings = {
-  asetting: "default",
+export const DEFAULT_SETTINGS: CarouselPluginSettings = {
+  showArrowButtons: true,
+
 }
 
-export class SampleSettingTab extends PluginSettingTab {
-  plugin: Sample;
-  
-  constructor(app: App, plugin: Sample) {
+export class CarouselPluginSettingTab extends PluginSettingTab {
+  plugin: CarouselPlugin;
+
+  constructor(app: App, plugin: CarouselPlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }
@@ -23,6 +24,15 @@ export class SampleSettingTab extends PluginSettingTab {
     containerEl.empty()
 
     new Setting(containerEl)
-      .setName("A Setting");
+      .setName("Show Switch Arrow")
+      .setDesc("Show the switch arrow in the carousel. Don't set 'dragfree: false' at the same time.")
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.showArrowButtons)
+          .onChange(async (value) => {
+            this.plugin.settings.showArrowButtons = value;
+            await this.plugin.saveSettings();
+          })
+      );
   }
 }

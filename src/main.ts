@@ -1,4 +1,5 @@
 import { CAROUSEL_VIEW_TYPE, CarouselConfigurationsView } from "./configuration-view";
+import { CarouselPluginSettings, DEFAULT_SETTINGS } from "./settings";
 import { Plugin, WorkspaceLeaf } from "obsidian";
 
 import CarouselModal from "./carousel-modal";
@@ -8,9 +9,11 @@ import { createRoot } from 'react-dom/client';
 import { parseSource } from "./utils";
 
 export default class CarouselPlugin extends Plugin {
+  settings: CarouselPluginSettings;
+
   async onload() {
     this.registerMarkdownCodeBlockProcessor("carousel", (source, el, ctx) => {
-      const carouseloptions = parseSource(this.app, source);
+      const carouseloptions = parseSource(this, source);
       const carousel = React.createElement(EmblaCarousel, carouseloptions);
       createRoot(el).render(carousel);
     });
@@ -47,5 +50,13 @@ export default class CarouselPlugin extends Plugin {
         workspace.revealLeaf(leaf);
       },
     })
+  }
+
+  public async loadSettings() {
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+  }
+
+  public async saveSettings() {
+    await this.saveData(this.settings);
   }
 }

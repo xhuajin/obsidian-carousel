@@ -1,7 +1,7 @@
 {
   "id": "carousel",
   "name": "Carousel",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "minAppVersion": "1.0.0",
   "description": "Create a carousel component in your markdown note.",
   "author": "Huajin",
