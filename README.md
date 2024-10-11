@@ -25,6 +25,7 @@ This plugin is implemented base on top of [Embla Carousel](https://github.com/da
 |    autoplay    |           true/false           | When set to true, carousel will automatically **skip** to the next image every 3s. Default is false.                                                     |
 |   autoscroll   |           true/false           | When set to true, carousel will automatically **scroll** to the next image every 3s. Default is false.                                                   |
 |      fade      |           true/false           | When switching images, the switching style is changed from scroll to fade.                                                                               |
+|  Arrowbutton   |           true/false           | You can hide arrow buttons by setting `Arrowbutton: false`. Default is true.                                                                             |
 
 ## Example
 
