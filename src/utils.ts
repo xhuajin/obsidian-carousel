@@ -87,8 +87,8 @@ export function parseSource(plugin: CarouselPlugin, source: string): CarouselOpt
         case "thumb":
           carouseloptions.thumb = value.trim() === "true";
           break;
-        case "arrawbutton":
-          carouseloptions.arrawbutton = value.trim() === "true";
+        case "arrowbutton":
+          carouseloptions.arrowbutton = value.trim() === "true";
           break;
       }
     }
